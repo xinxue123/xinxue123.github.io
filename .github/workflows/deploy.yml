@@ -1,0 +1,36 @@
+name: Deploy Sphinx Docs
+
+on:
+  push:
+    branches:
+      - master  # 监听 main 分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install sphinx sphinx_rtd_theme recommonmark
+          sudo apt-get install -y make
+
+      - name: Build Sphinx documentation
+        run: |
+          make html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/html
+          publish_branch: gh-pages  # 指定发布到 gh-pages 分支
+          keep_files: true  # 保留已有文件
+          force_orphan: true  # 强制创建 gh-pages 分支（如果不存在）
