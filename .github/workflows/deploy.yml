@@ -3,7 +3,7 @@ name: Deploy Sphinx Docs
 on:
   push:
     branches:
-      - master  # 监听 main 分支
+      - main  # 监听 main 分支
 
 jobs:
   deploy:
